@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Γιατί ξέσπασε η Γαλλική Επανάσταση;</title>
+<style>
+:root{
+  --bg:#f5ebdd;--paper:#fbf7f0;--ink:#24303a;--muted:#756b61;
+  --navy:#314c5a;--rust:#a6533c;--sage:#7f927a;--ochre:#d19a4a;
+  --line:#d6c6b4;--shadow:0 12px 30px rgba(52,42,33,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+body:before,body:after{content:"";position:fixed;border:1px solid #e3d7c8;border-radius:50%;width:180px;height:180px;z-index:-1}
+body:before{left:-100px;top:-110px}
+body:after{right:-100px;bottom:-100px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 30px}
+.topbar{display:flex;justify-content:flex-end;margin-bottom:12px}
+.lang-btn{
+  border:0;border-radius:999px;padding:10px 16px;font-weight:850;cursor:pointer;
+  background:var(--navy);color:white;box-shadow:0 6px 14px rgba(52,42,33,.12)
+}
+
+header{display:grid;grid-template-columns:1.5fr .8fr;gap:18px;align-items:stretch}
+.hero,.question{background:rgba(251,247,240,.92);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.hero{padding:28px 30px}
+.kicker{display:inline-block;background:var(--navy);color:white;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:800;letter-spacing:.06em}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,5vw,54px);line-height:1.02;margin:16px 0 12px}
+.lead{font-size:18px;line-height:1.5;color:var(--muted);max-width:760px}
+.question{padding:24px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#f8f0e5,#efe0ca)}
+.question strong{font-family:Georgia,"Times New Roman",serif;font-size:28px;line-height:1.15;color:var(--rust)}
+.question span{margin-top:10px;color:var(--muted);line-height:1.45;font-size:17px}
+.question-visual{
+  width:min(150px,42%);
+  align-self:flex-end;
+  margin-top:14px;
+  border-radius:12px;
+  border:1px solid rgba(117,107,97,.32);
+  box-shadow:0 5px 14px rgba(52,42,33,.10);
+  opacity:.9;
+  display:block;
+}
+.instructions{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0 4px}
+.instructions span{border:1px solid var(--line);background:#fffaf3;border-radius:999px;padding:8px 12px;font-size:14px;font-weight:700}
+
+main{display:grid;grid-template-columns:.95fr 1.25fr;gap:18px;margin-top:20px}
+.panel{background:rgba(251,247,240,.95);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px}
+.panel h2{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin:0 0 8px}
+.small{font-size:15px;color:var(--muted);line-height:1.45}
+
+.deck{display:grid;gap:12px;margin-top:16px}
+.evidence{border:1px solid #d9ccbd;border-left:7px solid var(--ochre);border-radius:16px;background:#fffaf3;padding:14px 15px;cursor:grab;user-select:none;transition:.15s transform,.15s box-shadow,.15s opacity;box-shadow:0 6px 14px rgba(52,42,33,.07)}
+.evidence:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(52,42,33,.1)}
+.evidence.selected{outline:3px solid rgba(209,154,74,.35);transform:translateY(-2px)}
+.evidence.dragging{opacity:.45}
+.evidence .num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ochre);color:white;font-size:13px;font-weight:900;margin-right:8px}
+.evidence .front{font-weight:800;font-size:17px}
+.evidence .detail{display:none;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);line-height:1.5;color:#403b36;font-size:16px}
+.evidence.open .detail{display:block}
+.evidence button{appearance:none;border:0;background:transparent;color:var(--rust);font-weight:800;padding:0;margin-top:8px;cursor:pointer;font-size:14px}
+
+.buckets{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.bucket{min-height:330px;border:2px dashed #cbb9a6;border-radius:18px;padding:12px;background:#f8f4ee;transition:.15s}
+.bucket[data-key="ineq"]{background:#f2e3dc}
+.bucket[data-key="pol"]{background:#e6efef}
+.bucket[data-key="crisis"]{background:#e8eee4}
+.bucket.over{transform:scale(1.015);border-style:solid}
+.bucket h3{margin:0 0 8px;text-align:center;font-size:15px;letter-spacing:.03em}
+.bucket[data-key="ineq"] h3{color:var(--rust)}
+.bucket[data-key="pol"] h3{color:var(--navy)}
+.bucket[data-key="crisis"] h3{color:var(--sage)}
+.bucket .dropnote{text-align:center;font-size:13px;color:var(--muted);padding:10px 5px}
+.bucket .evidence{cursor:pointer;margin-top:9px;background:#fffdf8}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button.action{border:0;border-radius:999px;padding:11px 16px;font-weight:850;cursor:pointer;background:var(--ink);color:white;font-size:14px}
+button.action.secondary{background:#e5d8c8;color:var(--ink)}
+.feedback{margin-top:14px;border-radius:16px;padding:14px 15px;background:#efe8dc;border:1px solid var(--line);display:none;line-height:1.5;font-size:15px}
+.feedback.show{display:block}
+.feedback strong{color:var(--rust)}
+
+.synthesis{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:18px;background:#fffaf3}
+.synthesis h3{margin:0 0 10px;font-family:Georgia,"Times New Roman",serif;font-size:23px}
+.synthesis .choices{display:flex;gap:8px;flex-wrap:wrap}
+.synthesis label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:8px 11px;background:white;font-size:14px;font-weight:700;cursor:pointer}
+.synthesis .hint{margin-top:10px;font-size:14px;color:var(--muted);line-height:1.45}
+
+footer{
+  border-top:1px solid var(--line);margin-top:22px;padding:14px 3px 0;
+  color:var(--muted);font-size:12px;text-align:center;line-height:1.35
+}
+
+@media (max-width:900px){
+  header,main{grid-template-columns:1fr}
+  .buckets{grid-template-columns:1fr}
+  .bucket{min-height:150px}
+  h1{font-size:38px}
+}
+@media (max-width:560px){
+  .wrap{padding:12px}
+  .hero,.question,.panel{border-radius:16px}
+  .hero{padding:20px}
+  .question{padding:18px}
+  .buckets{gap:9px}
+  .evidence{padding:12px}
+  .lang-btn{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <button class="lang-btn" id="langBtn" type="button">English</button>
+  </div>
+
+  <header>
+    <section class="hero">
+      <div class="kicker" data-i18n="kicker"></div>
+      <h1 data-i18n="title"></h1>
+      <div class="lead" data-i18n="lead"></div>
+      <div class="instructions">
+        <span data-i18n="step1"></span>
+        <span data-i18n="step2"></span>
+        <span data-i18n="step3"></span>
+      </div>
+    </section>
+
+    <aside class="question">
+      <strong data-i18n="bigq"></strong>
+      <span data-i18n="bigq2"></span>
+      <img
+        id="questionImage"
+        class="question-visual"
+        src="french%20revolution.bmp"
+        alt="Γελοιογραφία της γαλλικής κοινωνίας πριν από την Επανάσταση"
+      />
+    </aside>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2 data-i18n="evidenceTitle"></h2>
+      <div class="small" data-i18n="evidenceHelp"></div>
+      <div id="deck" class="deck"></div>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="sortTitle"></h2>
+      <div class="small" data-i18n="sortHelp"></div>
+
+      <div class="buckets">
+        <div class="bucket" data-key="ineq">
+          <h3 data-i18n="ineqTitle"></h3>
+          <div class="dropnote" data-i18n="dropHere"></div>
+        </div>
+        <div class="bucket" data-key="pol">
+          <h3 data-i18n="polTitle"></h3>
+          <div class="dropnote" data-i18n="dropHere"></div>
+        </div>
+        <div class="bucket" data-key="crisis">
+          <h3 data-i18n="crisisTitle"></h3>
+          <div class="dropnote" data-i18n="dropHere"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="action" id="check" type="button" data-i18n="checkBtn"></button>
+        <button class="action secondary" id="reset" type="button" data-i18n="resetBtn"></button>
+      </div>
+
+      <div id="feedback" class="feedback"></div>
+
+      <div class="synthesis">
+        <h3 data-i18n="synthTitle"></h3>
+        <div class="small" data-i18n="synthQ"></div>
+        <div class="choices">
+          <label><input type="radio" name="spark" value="ineq"> <span data-i18n="ineqShort"></span></label>
+          <label><input type="radio" name="spark" value="pol"> <span data-i18n="polShort"></span></label>
+          <label><input type="radio" name="spark" value="crisis"> <span data-i18n="crisisShort"></span></label>
+        </div>
+        <div class="hint" id="sparkHint"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Παναγιώτης Δόμβρος, Εκπαιδευτικός-Θεατρολόγος, Επιμορφωτής ΤΠΕ, Διευθυντής 1ου Γυμνασίου Πυλαίας
+  </footer>
+</div>
+
+<script>
+let lang = 'el';
+let selected = null;
+
+const ui = {
+  el:{
+    kicker:'ΓΑΛΛΙΑ • 1789',
+    title:'Γιατί ξέσπασε η Γαλλική Επανάσταση;',
+    lead:'Άνοιξε τις κάρτες και δες τι δείχνουν. Μετά βάλε καθεμία στην κατηγορία που ταιριάζει καλύτερα.',
+    step1:'1. Άνοιξε την κάρτα',
+    step2:'2. Σύρε ή επίλεξέ την',
+    step3:'3. Βάλ’ την σε κατηγορία',
+    bigq:'Οι ιδέες αρκούν για να γίνει επανάσταση;',
+    bigq2:'Ή χρειάζονται μαζί ανισότητα, αποκλεισμός και μεγάλη πίεση στην καθημερινή ζωή;',
+    evidenceTitle:'Ιστορικά στοιχεία',
+    evidenceHelp:'Πάτησε κάθε κάρτα για να δεις την πληροφορία. Σε οθόνη αφής: επίλεξε μια κάρτα και μετά πάτησε μια κατηγορία.',
+    sortTitle:'Ταξινόμηση',
+    sortHelp:'Βάλε κάθε κάρτα εκεί που ταιριάζει καλύτερα. Αν έχεις άλλη άποψη, εξήγησέ την.',
+    ineqTitle:'ΑΝΙΣΟΤΗΤΑ & ΠΡΟΝΟΜΙΑ',
+    polTitle:'ΠΟΛΙΤΙΚΟΣ ΑΠΟΚΛΕΙΣΜΟΣ',
+    crisisTitle:'ΚΡΙΣΗ ΣΤΗΝ ΚΑΘΗΜΕΡΙΝΗ ΖΩΗ',
+    dropHere:'άφησε εδώ μια κάρτα',
+    checkBtn:'Δες μια ενδεικτική λύση',
+    resetBtn:'Επαναφορά',
+    synthTitle:'Μικρή σύνθεση',
+    synthQ:'Ποιο πρόβλημα έκανε την κατάσταση πιο άμεση και πιο επικίνδυνη;',
+    ineqShort:'Ανισότητα',
+    polShort:'Πολιτικός αποκλεισμός',
+    crisisShort:'Κρίση ζωής',
+    sparkHint:'Διάλεξε και εξήγησε: «Πιστεύω ότι αυτό ήταν πιο άμεσο, επειδή…»',
+    show:'Δείξε το στοιχείο',
+    hide:'Κρύψε το στοιχείο',
+    feedbackIncomplete:(placed,total)=>`Έχεις βάλει <strong>${placed} από ${total}</strong> κάρτες. Βάλ’ τες όλες πριν ελέγξεις.`,
+    feedbackDone:(primary,total)=>`Μια ενδεικτική λύση βάζει τις κάρτες 1–2 στην <strong>ανισότητα</strong>, τις 3–4 στον <strong>πολιτικό αποκλεισμό</strong> και τις 5–6 στην <strong>κρίση της καθημερινής ζωής</strong>. Η κάρτα 7 συνδέει όλα τα προβλήματα. Στη δική σου ταξινόμηση, ${primary} από ${total} κάρτες ταιριάζουν με αυτή τη λύση. Το σημαντικό είναι να μπορείς να εξηγήσεις την επιλογή σου.`,
+    sparkChosen:'Εξήγησε την επιλογή σου με ένα ιστορικό στοιχείο.'
+  },
+  en:{
+    kicker:'FRANCE • 1789',
+    title:'Why did the French Revolution begin?',
+    lead:'Open the cards and read the clues. Then place each card in the category that fits best.',
+    step1:'1. Open a card',
+    step2:'2. Drag or select it',
+    step3:'3. Place it in a category',
+    bigq:'Are ideas enough to start a revolution?',
+    bigq2:'Or do inequality, political exclusion, and daily hardship also matter?',
+    evidenceTitle:'Historical clues',
+    evidenceHelp:'Click each card to read the clue. On a touchscreen: select a card, then tap a category.',
+    sortTitle:'Sort the clues',
+    sortHelp:'Place each card where it fits best. If you disagree, explain your choice.',
+    ineqTitle:'INEQUALITY & PRIVILEGES',
+    polTitle:'POLITICAL EXCLUSION',
+    crisisTitle:'CRISIS IN DAILY LIFE',
+    dropHere:'drop a card here',
+    checkBtn:'See one possible answer',
+    resetBtn:'Reset',
+    synthTitle:'Quick conclusion',
+    synthQ:'Which problem made the situation more urgent and dangerous?',
+    ineqShort:'Inequality',
+    polShort:'Political exclusion',
+    crisisShort:'Daily-life crisis',
+    sparkHint:'Choose one and explain: “I think this was more urgent because…”',
+    show:'Show the clue',
+    hide:'Hide the clue',
+    feedbackIncomplete:(placed,total)=>`You have placed <strong>${placed} of ${total}</strong> cards. Place them all before checking.`,
+    feedbackDone:(primary,total)=>`One possible answer places cards 1–2 under <strong>inequality</strong>, cards 3–4 under <strong>political exclusion</strong>, and cards 5–6 under <strong>crisis in daily life</strong>. Card 7 links the problems together. In your sorting, ${primary} of ${total} cards match this answer. What matters most is that you can explain your choice.`,
+    sparkChosen:'Explain your choice using one historical clue.'
+  }
+};
+
+const evidence = [
+  {
+    id:'e1', key:'ineq',
+    el:{front:'Τρεις τάξεις', detail:'Ο κλήρος ήταν περίπου το 0,5% του πληθυσμού, οι ευγενείς το 1,5% και η τρίτη τάξη περίπου το 98%.'},
+    en:{front:'Three estates', detail:'The clergy were about 0.5% of the population, the nobles 1.5%, and the Third Estate about 98%.'}
+  },
+  {
+    id:'e2', key:'ineq',
+    el:{front:'Προνόμια', detail:'Ο κλήρος και οι ευγενείς είχαν προνόμια. Η τρίτη τάξη είχε πολλές υποχρεώσεις και πλήρωνε τους φόρους.'},
+    en:{front:'Privileges', detail:'The clergy and nobles had privileges. The Third Estate had many duties and paid the taxes.'}
+  },
+  {
+    id:'e3', key:'pol',
+    el:{front:'Η αστική τάξη', detail:'Οι αστοί είχαν σημαντικό ρόλο στην οικονομία, αλλά μικρή συμμετοχή στις πολιτικές αποφάσεις.'},
+    en:{front:'The middle class', detail:'The middle class played an important role in the economy but had little say in political decisions.'}
+  },
+  {
+    id:'e4', key:'pol',
+    el:{front:'Ποιος αποφασίζει;', detail:'Η δυσαρέσκεια δεν αφορούσε μόνο τα χρήματα. Αφορούσε και το ποιος είχε δικαίωμα να συμμετέχει στις αποφάσεις.'},
+    en:{front:'Who gets a say?', detail:'People were not only angry about money. They were also angry about who had the right to take part in decisions.'}
+  },
+  {
+    id:'e5', key:'crisis',
+    el:{front:'Δύσκολη ζωή', detail:'Από τα μέσα του 18ου αιώνα η ζωή γινόταν πιο δύσκολη για μεγάλο μέρος της τρίτης τάξης.'},
+    en:{front:'Harder living conditions', detail:'From the middle of the 18th century, life became harder for many people in the Third Estate.'}
+  },
+  {
+    id:'e6', key:'crisis',
+    el:{front:'Χειμώνας 1788–1789', detail:'Η πείνα οδήγησε ανθρώπους σε λεηλασίες πλούσιων σπιτιών και κρατικών αποθηκών.'},
+    en:{front:'Winter 1788–1789', detail:'Hunger led people to loot rich houses and government food stores.'}
+  },
+  {
+    id:'e7', key:'multi',
+    el:{front:'Τα προβλήματα συνδέονται', detail:'Η ανισότητα, ο αποκλεισμός και η κρίση στη ζωή των ανθρώπων μπορούσαν να δυναμώνουν το ένα το άλλο.'},
+    en:{front:'The problems connect', detail:'Inequality, political exclusion, and hardship in daily life could make each other worse.'}
+  }
+];
+
+const deck = document.getElementById('deck');
+
+function cardEl(item){
+  const el = document.createElement('article');
+  el.className='evidence';
+  el.id=item.id;
+  el.draggable=true;
+  el.dataset.answer=item.key;
+  el.innerHTML=`
+    <div>
+      <span class="num">${item.id.slice(1)}</span>
+      <span class="front"></span>
+    </div>
+    <button type="button"></button>
+    <div class="detail"></div>`;
+  el.querySelector('button').addEventListener('click',(ev)=>{
+    ev.stopPropagation();
+    el.classList.toggle('open');
+    updateCardText(el,item);
+  });
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('.evidence').forEach(c=>c.classList.remove('selected'));
+    selected=el;
+    el.classList.add('selected');
+  });
+  el.addEventListener('dragstart',()=>{
+    selected=el;
+    el.classList.add('dragging');
+  });
+  el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+  return el;
+}
+
+function updateCardText(el,item){
+  el.querySelector('.front').textContent=item[lang].front;
+  el.querySelector('.detail').textContent=item[lang].detail;
+  el.querySelector('button').textContent=el.classList.contains('open') ? ui[lang].hide : ui[lang].show;
+}
+
+function renderDeck(){
+  evidence.forEach(item=>{
+    const el=cardEl(item);
+    deck.appendChild(el);
+    updateCardText(el,item);
+  });
+}
+
+function applyLanguage(){
+  document.documentElement.lang = lang;
+  document.title = lang==='el' ? 'Γιατί ξέσπασε η Γαλλική Επανάσταση;' : 'Why did the French Revolution begin?';
+  document.getElementById('langBtn').textContent = lang==='el' ? 'English' : 'Ελληνικά';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.dataset.i18n;
+    el.textContent=ui[lang][key];
+  });
+  evidence.forEach(item=>{
+    const el=document.getElementById(item.id);
+    if(el) updateCardText(el,item);
+  });
+  const hint=document.getElementById('sparkHint');
+  const checked=document.querySelector('input[name="spark"]:checked');
+  hint.textContent = checked ? ui[lang].sparkChosen : ui[lang].sparkHint;
+  document.getElementById('feedback').className='feedback';
+  const qimg=document.getElementById('questionImage');
+  qimg.alt = lang==='el'
+    ? 'Γελοιογραφία της γαλλικής κοινωνίας πριν από την Επανάσταση'
+    : 'Cartoon of French society before the Revolution';
+}
+
+renderDeck();
+applyLanguage();
+
+document.getElementById('langBtn').addEventListener('click',()=>{
+  lang = lang==='el' ? 'en' : 'el';
+  applyLanguage();
+});
+
+document.querySelectorAll('.bucket').forEach(b=>{
+  b.addEventListener('dragover',ev=>{ev.preventDefault();b.classList.add('over')});
+  b.addEventListener('dragleave',()=>b.classList.remove('over'));
+  b.addEventListener('drop',ev=>{
+    ev.preventDefault();
+    b.classList.remove('over');
+    if(selected){
+      b.appendChild(selected);
+      selected.classList.remove('selected');
+      selected=null;
+    }
+  });
+  b.addEventListener('click',ev=>{
+    if(ev.target.closest('.evidence')) return;
+    if(selected){
+      b.appendChild(selected);
+      selected.classList.remove('selected');
+      selected=null;
+    }
+  });
+});
+
+document.getElementById('reset').addEventListener('click',()=>{
+  evidence.forEach(e=>{
+    const el=document.getElementById(e.id);
+    el.classList.remove('selected');
+    deck.appendChild(el);
+  });
+  selected=null;
+  document.getElementById('feedback').className='feedback';
+  document.querySelectorAll('input[name="spark"]').forEach(r=>r.checked=false);
+  document.getElementById('sparkHint').textContent=ui[lang].sparkHint;
+});
+
+document.getElementById('check').addEventListener('click',()=>{
+  let placed=0, primary=0;
+  evidence.forEach(e=>{
+    const el=document.getElementById(e.id);
+    const parent=el.closest('.bucket');
+    if(parent){
+      placed++;
+      if(e.key==='multi' || parent.dataset.key===e.key) primary++;
+    }
+  });
+  const f=document.getElementById('feedback');
+  f.className='feedback show';
+  if(placed<evidence.length){
+    f.innerHTML=ui[lang].feedbackIncomplete(placed,evidence.length);
+    return;
+  }
+  f.innerHTML=ui[lang].feedbackDone(primary,evidence.length);
+});
+
+document.querySelectorAll('input[name="spark"]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    document.getElementById('sparkHint').textContent=ui[lang].sparkChosen;
+  });
+});
+</script>
+</body>
+</html>
